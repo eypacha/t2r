@@ -1,10 +1,10 @@
 # t2r
-Convert a decimal numbers to a Roman Numerals in the command line.
+Convert decimal numbers to Roman numerals in the command line.
 
 ## Instalation
 If you want to install this script globally, just copy it to your **usr/local/bin** folder. 
 
-*(Sorry for write this in node. So you have to install node first for run this program :S*)
+*(Sorry for write this in node. So you have to install node first to run this program :S*)
 
 ## Usage
 ```t2r [options] [min-number] <number> [flags]```
@@ -20,18 +20,18 @@ min-number
 : Show version
 
 --info
-: Show info about the romans numerals
+: Show info about romans numerals
 
 ##### Global flags
 -b
 : Show the number in base 10 too
 
 -c
-: Count the length of the Roman Numerals
+: Count the length of the Roman numerals
 
 ## ToDo
-[ ] *Write the same but in bash*
-[ ] *¿Add more options?*
-[ ] *Stop writing scripts nobody cares*
-[ ] *Buy some dinner*
-[x] *Play minecraft*
+- [ ] *Write the same but in bash*
+- [ ] *¿Add more options?*
+- [ ] *Stop writing scripts nobody cares*
+- [ ] *Buy some dinner*
+- [x] *Play Minecraft*
