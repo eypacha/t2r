@@ -1,0 +1,181 @@
+#!/usr/bin/env node
+
+// Global variables
+const version = 't2r v1.0.0'
+const argv = process.argv
+let args
+
+const helpText = `Convert a decimal numbers to a Roman Numerals (from ${c(33,0)} to ${c(33,1000000)})
+
+Usage: t2r [options] [min-number] <number> [flags]
+
+Options:
+    min-number      Min number to be converted
+                    (if not is set only the number will be converted)
+
+    --help          Show this help
+    --version       Show version
+    --info          Show info about the romans numerals
+
+Global flags:
+    -b              Show the number in base 10 too
+    -c              Count the length of the Roman Numerals
+
+Writen by ${c(35,'EyPacha')}
+${c(32,'https://github.com/eypacha/')}
+    `
+
+const infoText = `Roman numeral are any of the symbols used in a system of numerical notation based
+on the ancient Roman system. Numbers in this system are represented by
+combinations of letters from the Latin alphabet
+
+${c(33,1)}  ${c(33,2)}   ${c(33,3)}    ${c(33,40)}  ${c(33,5)}  ${c(33,6)}    ${c(33,7)}    ${c(33,8)}    ${c(33,9)}  ${c(33,10)}
+I, II, III, IV, V, VI, VII, VIII, IX, X
+
+The numerals for 4 (IV) and 9 (IX) are written using "subtractive notation" where
+the first symbol (I) is subtracted from the larger one (V, or X), thus avoiding
+the clumsier (IIII, and VIIII)
+
+Subtractive notation is also used for 40 (XL), 90 (XC), 400 (CD) and 900 (CM)
+and beyond
+
+I   ${c(33,1)}       M   ${c(33,1000)}        M̅   ${c(33,1000000)}
+V   ${c(33,5)}       V̅   ${c(33,5000)}
+X   ${c(33,10)}      X̅   ${c(33,10000)}
+L   ${c(33,50)}      L̅   ${c(33,50000)}
+C   ${c(33,100)}     C̅   ${c(33,100000)}
+D   ${c(33,500)}     D̅   ${c(33,500000)}
+`
+
+// Main function
+function main() {
+
+    args = getArgs()
+
+    if (typeof args === 'undefined') return
+    if (args.help) return console.log(helpText)
+    if (args.info) return console.log(infoText)
+    if (args.version) return console.log(version)
+    if (!args.number) return showError('No number was set. Maybe try --help for help.')
+
+    // If there is a min value convert from min to max
+    if (typeof args.minNumber !== 'undefined') {
+
+        if (args.minNumber > args.number) {
+            showError('Min number cannot be greater than max number.')
+        } else {
+
+            for (let i = args.minNumber; i <= args.number; i++) t2r(i)
+        }
+
+    } else {
+        t2r(args.number)
+
+    }
+
+}
+
+// Function to get args from command line
+function getArgs() {
+
+    if (argv.length == 2) return console.log(helpText)
+
+    const args = {}
+
+    for (let arg of argv.slice(2, argv.length)) {
+
+        // Long args
+        if (arg.slice(0, 2) === '--') {
+            const longArg = arg.split('=')
+            const longArgFlag = longArg[0].slice(2, longArg[0].length)
+            const longArgValue = longArg.length > 1 ? longArg[1] : true
+            args[longArgFlag] = longArgValue
+        }
+
+        // Flags
+        else if (arg[0] === '-') {
+            const flags = arg.slice(1, arg.length).split('')
+            flags.forEach(flag => {
+                args[flag] = true
+            })
+        }
+
+        // The numbers
+        else {
+
+            if (isNaN(arg)) return showError(`Unknown command: '${arg}'. Maybe try --help for help. `)
+
+            else if (typeof args.number === 'undefined') args.number = parseInt(arg)
+
+            else if (typeof args.minNumber === 'undefined') {
+
+                args.minNumber = args.number
+                args.number = parseInt(arg)
+
+            } else {
+
+                showError(`Already set the min and max numbers(${c(33,args.minNumber)} & ${c(33,args.number)}. Maybe try --help for help.`)
+                args.minNumber = undefined
+                args.number = undefined
+
+            }
+
+        }
+    }
+
+    return args
+}
+
+// Main convertion function
+function t2r(number) {
+
+    let num = [1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000, 4000, 5000, 9000, 10000, 40000, 50000, 90000, 100000, 400000, 500000, 900000, 1000000]
+    let sym = ["I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M", "MV̅", "V̅", "V̅X̅", "X̅", "X̅L̅", "L̅", "L̅C̅", "C̅", "D̅C̅", "D̅", "D̅M̅", "M̅"]
+    let i = 24
+    let roman = ''
+    let n = number
+    let output = ''
+
+    while (n > 0) {
+        let div = Math.floor(n / num[i])
+        n = n % num[i]
+        while (div--) roman += sym[i]
+        i--
+    }
+
+    if (args.b) output = `${c(33,number)} `
+    output += roman.length ? roman : `${c(2,'undefined')}`
+    if (args.c) output += ` ${c(35,lengthOfRoman(roman))}`
+
+    console.log(output)
+}
+
+// Function to count the number of symbols in the Roman Numeral
+function lengthOfRoman(roman) {
+
+    let doubleSym = ["V̅", "X̅", "L̅", "C̅", "D̅", "M̅"]
+
+    // First replace all UTF-8 2 bytes characters 
+    // with a single character placeholder
+    // and then join it back together
+
+    for (let i = 0; i < doubleSym.length; i++) {
+        roman = roman.split(doubleSym[i]).join(1)
+    }
+
+    // Count the number of characters in the string
+    return roman.length
+
+}
+
+// Color helper function
+function c(color, text) {
+    return `\x1b[${color}m${text}\x1b[0m`
+}
+
+// Error handling
+function showError(err) {
+    console.log(`${c(31,'Error')} ${err}`)
+}
+
+main()
