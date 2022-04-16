@@ -5,7 +5,7 @@ const version = 't2r v1.0.0'
 const argv = process.argv
 let args
 
-const helpText = `Convert a decimal numbers to a Roman Numerals (from ${c(33,0)} to ${c(33,1000000)})
+const helpText = `Convert a decimal numbers to Roman numerals (from ${c(33,0)} to ${c(33,1000000)})
 
 Usage: t2r [options] [min-number] <number> [flags]
 
@@ -15,17 +15,17 @@ Options:
 
     --help          Show this help
     --version       Show version
-    --info          Show info about the romans numerals
+    --info          Show info about romans numerals
 
 Global flags:
     -b              Show the number in base 10 too
-    -c              Count the length of the Roman Numerals
+    -c              Count the length of the roman Numerals
 
 Writen by ${c(35,'EyPacha')}
 ${c(32,'https://github.com/eypacha/')}
     `
 
-const infoText = `Roman numeral are any of the symbols used in a system of numerical notation based
+const infoText = `Roman numerals are any of the symbols used in a system of numerical notation based
 on the ancient Roman system. Numbers in this system are represented by
 combinations of letters from the Latin alphabet
 
@@ -114,7 +114,7 @@ function getArgs() {
 
             } else {
 
-                showError(`Already set the min and max numbers(${c(33,args.minNumber)} & ${c(33,args.number)}. Maybe try --help for help.`)
+                showError(`You already set the min and max numbers(${c(33,args.minNumber)} & ${c(33,args.number)}. Maybe try --help for help.`)
                 args.minNumber = undefined
                 args.number = undefined
 
@@ -145,13 +145,13 @@ function t2r(number) {
 
     if (args.b) output = `${c(33,number)} `
     output += roman.length ? roman : `${c(2,'undefined')}`
-    if (args.c) output += ` ${c(35,lengthOfRoman(roman))}`
+    if (args.c) output += ` ${c(35,romanLength(roman))}`
 
     console.log(output)
 }
 
 // Function to count the number of symbols in the Roman Numeral
-function lengthOfRoman(roman) {
+function romanLength(roman) {
 
     let doubleSym = ["V̅", "X̅", "L̅", "C̅", "D̅", "M̅"]
 
