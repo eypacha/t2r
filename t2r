@@ -22,7 +22,7 @@ Global flags:
     -c              Count the length of the roman Numerals
 
 Writen by ${c(35,'EyPacha')}
-${c(36,'https://github.com/eypacha/')}
+${c(36,'https://github.com/eypacha/t2r')}
     `
 
 const infoText = `Roman numerals are any of the symbols used in a system of numerical notation based
